@@ -20,20 +20,27 @@
         #feedback { margin-top: 15px; font-weight: bold; font-size: 1.1rem; min-height: 1.5em; }
         #timer-text { font-weight: bold; color: var(--accent); margin-bottom: 10px; }
         .copyright { font-size: 0.85rem; color: #666; margin-top: 25px; border-top: 1px solid #eee; padding-top: 10px; }
+
+        /* التنسيقات المطلوبة لاسمك والمدرسة والتاريخ */
+        .normal-text { color: #000; font-weight: normal; font-size: 0.85rem; }
+        .date-red-small { color: #e53e3e; font-size: 0.85rem; font-weight: bold; margin: 10px 0; display: inline-block; }
     </style>
 </head>
-<body>
+<body onload="updateDateTime()">
 
 <div class="quiz-container">
     <div id="timer-bar"></div>
     
     <div id="login-section">
         <h2 style="color: var(--primary);">( تحدي اليوم )</h2>
-<div class="copyright">أ/ عبدالعزيز الفيفي - ثانوية الأمير عبدالمجيد 🎓</div>
+        
+        <div id="date-display" class="date-red-small">جاري تحميل التاريخ...</div>
+        
+        <div class="copyright">أ/ <span class="normal-text">عبدالعزيز الفيفي</span> - <span class="normal-text">ثانوية الأمير عبدالمجيد 🎓</span></div>
         <p></p>
         <input type="text" id="student-name" placeholder="أدخل اسمك الثلاثي لتبدأ...">
         <br>
-        <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار</button>
+        <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن</button>
     </div>
 
     <div id="quiz-section" class="hidden">
@@ -43,18 +50,33 @@
         <h2 id="question-text" style="margin-top: 5px;"></h2>
         <div id="options-container"></div>
         <div id="feedback"></div>
-        <div class="copyright">تصميم أ/ عبدالعزيز الفيفي - ثانوية الأمير عبدالمجيد 🎓</div>
+        <div class="copyright">تصميم أ/ <span class="normal-text">عبدالعزيز الفيفي</span> - <span class="normal-text">ثانوية الأمير عبدالمجيد 🎓</span></div>
     </div>
 
     <div id="result-section" class="hidden">
         <h2>تم اكتمال الاختبار بنجاح</h2>
         <h1 id="final-score" style="color: var(--primary);"></h1>
         <button class="btn-start" onclick="location.reload()">إعادة الاختبار</button>
-        <p style="margin-top: 20px;">✨ أ / عبد العزيز الفيفي - ثانوية الأمير عبدالمجيد 🎓</p>
+        <p style="margin-top: 20px;">✨ أ / <span class="normal-text">عبد العزيز الفيفي</span> - <span class="normal-text">ثانوية الأمير عبدالمجيد 🎓</span></p>
     </div>
 </div>
 
 <script>
+    // وظيفة عرض التاريخ الهجري والميلادي معاً بدون تكرار
+    function updateDateTime() {
+        const today = new Date();
+        const hijriOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic-umalqura', numberingSystem: 'arabic' };
+        const gregOptions = { day: 'numeric', month: 'long', year: 'numeric', numberingSystem: 'arabic' };
+        
+        const hijriDate = new Intl.DateTimeFormat('ar-SA', hijriOptions).format(today);
+        const gregDate = new Intl.DateTimeFormat('ar-SA', gregOptions).format(today);
+        
+        const dateDisplay = document.getElementById('date-display');
+        if (dateDisplay) {
+            dateDisplay.innerText = `${hijriDate} | ${gregDate} م`;
+        }
+    }
+
     let timeLeft = 40;
     let timerInterval;
     let currentQ = 0;
@@ -113,23 +135,16 @@
             alert("لطفاً، ادخل اسمك أولاً لتتمكن من البدء"); 
             return; 
         }
-        
-        // خلط البيانات
         quizData = shuffle([...rawData]);
-        
-        // الانتقال الفوري للقسم التالي
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('quiz-section').classList.remove('hidden');
-        
         showQuestion();
     }
 
     function showQuestion() {
         const q = quizData[currentQ];
         const shuffledOptions = shuffle([...q.options]);
-        
         document.getElementById('question-title').innerText = `س ${currentQ + 1} في ( ${q.type} )`;
-        
         const readingBox = document.getElementById('reading-container');
         if (q.text) {
             readingBox.innerText = q.text;
@@ -137,12 +152,10 @@
         } else {
             readingBox.classList.add('hidden');
         }
-
         document.getElementById('question-text').innerText = q.q;
         const container = document.getElementById('options-container');
         container.innerHTML = '';
         document.getElementById('feedback').innerText = '';
-        
         shuffledOptions.forEach((opt, index) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
@@ -151,7 +164,6 @@
             btn.onclick = () => checkAnswer(index, opt === q.correctText, q.correctText);
             container.appendChild(btn);
         });
-        
         startTimer();
     }
 
@@ -177,7 +189,6 @@
     function checkAnswer(index, isCorrect, correctText) {
         clearInterval(timerInterval);
         disableOptions();
-        
         const feedback = document.getElementById('feedback');
         if (isCorrect) {
             score++;
@@ -228,5 +239,4 @@
     }
 </script>
 </body>
-
 </html>
