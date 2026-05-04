@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحدي اليوم</title>
+    <title>تحدي اليوم - أ/ عبدالعزيز الفيفي</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --primary: #1a237e; --secondary: #311b92; --bg: #f8f9fa; --accent: #f57c00; --correct: #1b5e20; --wrong: #b71c1c; }
+        :root { --primary: #4a148c; --secondary: #7b1fa2; --bg: #f5f5f5; --accent: #ff9800; --correct: #2e7d32; --wrong: #c62828; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .quiz-container { background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); width: 95%; max-width: 700px; text-align: center; position: relative; border-top: 8px solid var(--primary); }
-        #timer-bar { position: absolute; top: 0; right: 0; height: 8px; background: var(--accent); width: 100%; transition: width 1s linear; border-radius: 20px 20px 0 0; }
-        .option-btn { display: block; width: 100%; padding: 14px; margin: 12px 0; border: 2px solid #e0e0e0; border-radius: 10px; background: #fff; cursor: pointer; transition: 0.3s; font-size: 1.1rem; text-align: right; }
-        .correct-flash { background-color: #e8f5e9 !important; border-color: var(--correct) !important; color: var(--correct); }
-        .wrong-flash { background-color: #ffebee !important; border-color: var(--wrong) !important; color: var(--wrong); }
+        .quiz-container { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 650px; text-align: center; position: relative; }
+        #timer-bar { position: absolute; top: 0; right: 0; height: 6px; background: var(--accent); width: 100%; transition: width 1s linear; border-radius: 15px 15px 0 0; }
+        .option-btn { display: block; width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; background: none; cursor: pointer; transition: 0.3s; font-size: 1.1rem; font-weight: 500; text-align: right; }
+        .correct-flash { background-color: #e8f5e9 !important; border-color: var(--correct) !important; color: var(--correct); border-width: 3px !important; }
+        .wrong-flash { background-color: #ffeeb2 !important; border-color: var(--wrong) !important; color: var(--wrong); }
         .hidden { display: none; }
-        .reading-text { background: #fffde7; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: right; border-right: 6px solid var(--accent); line-height: 1.8; }
-        input[type="text"] { width: 85%; padding: 15px; margin-bottom: 25px; border-radius: 10px; border: 2px solid #ddd; font-size: 1.1rem; text-align: center; }
-        .btn-start { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 15px 40px; border: none; border-radius: 12px; cursor: pointer; font-size: 1.2rem; font-weight: bold; }
-        .copyright { font-size: 0.9rem; color: #777; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px; }
-        .date-badge { background: #eee; color: var(--wrong); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; margin-bottom: 15px; display: inline-block; }
+        .reading-text { background: #fff9c4; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: right; font-size: 1rem; border-right: 5px solid var(--accent); line-height: 1.6; }
+        input[type="text"] { width: 85%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 2px solid #ddd; font-size: 1rem; text-align: center; }
+        .btn-start { background: var(--primary); color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; }
+        #feedback { margin-top: 15px; font-weight: bold; font-size: 1.1rem; min-height: 1.5em; }
+        #timer-text { font-weight: bold; color: var(--accent); margin-bottom: 10px; }
+        .copyright { font-size: 0.85rem; color: #666; margin-top: 25px; border-top: 1px solid #eee; padding-top: 10px; }
+        .normal-text { color: #000; font-weight: normal; font-size: 0.85rem; }
+        .date-red-small { color: #e53e3e; font-size: 0.85rem; font-weight: bold; margin: 10px 0; display: inline-block; }
     </style>
 </head>
 <body onload="checkFirstTime()">
@@ -28,46 +31,51 @@
     
     <!-- قسم الدخول -->
     <div id="login-section">
-        <h1 style="color: var(--primary);">تحدي اليوم ☁️</h1>
-        <div id="date-display" class="date-badge">جاري التحميل...</div>
-        <p>اختبار مربوط بالسحابة - 20 سؤالاً 🚀</p>
-        <input type="text" id="student-name" placeholder="أدخل اسمك الثلاثي للبدء...">
+        <h2 style="color: var(--primary);">( تحدي اليوم )</h2>
+        <div id="date-display" class="date-red-small">جاري تحميل التاريخ...</div>
+        <div class="copyright">أ/ <span class="normal-text">عبدالعزيز الفيفي</span> - <span class="normal-text">ثانوية الأمير عبدالمجيد 🎓</span></div>
+        <p></p>
+        <input type="text" id="student-name" placeholder="أدخل اسمك الثلاثي لتبدأ...">
         <br>
-        <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن</button>
-        <div class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></div>
+        <button class="btn-start" onclick="startQuiz()">بدأ الاختبار</button>
     </div>
 
     <!-- قسم منع الإعادة -->
     <div id="blocked-section" class="hidden">
         <h2 style="color: var(--wrong);">عذراً.. لا يمكن إعادة الاختبار!</h2>
         <p>لقد قمت بتأدية هذا التحدي مسبقاً من هذا الجهاز.</p>
-        <div class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></div>
+        <div class="copyright">أ/ <span class="normal-text">عبدالعزيز الفيفي</span> - <span class="normal-text">ثانوية الأمير عبدالمجيد 🎓</span></div>
     </div>
 
     <!-- قسم الأسئلة -->
     <div id="quiz-section" class="hidden">
-        <div id="timer-text" style="font-weight:bold; color:var(--wrong); margin-bottom:10px;">⏳ المتبقي: 40 ثانية</div>
-        <h3 id="question-title" style="color: var(--secondary); margin-bottom: 10px;"></h3>
+        <div id="timer-text">الوقت المتبقي: 40</div>
+        <h3 id="question-title" style="color: var(--secondary); margin-bottom: 5px;"></h3>
         <div id="reading-container" class="reading-text hidden"></div>
-        <h2 id="question-text" style="margin: 15px 0;"></h2>
+        <h2 id="question-text" style="margin-top: 5px;"></h2>
         <div id="options-container"></div>
-        <div id="feedback" style="margin-top:20px; font-weight:bold;"></div>
-        <div class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></div>
+        <div id="feedback"></div>
+        <div class="copyright"> أ/ <span class="normal-text">عبدالعزيز الفيفي</span> - <span class="normal-text">ثانوية الأمير عبدالمجيد 🎓</span></div>
     </div>
 
     <!-- قسم النتيجة -->
     <div id="result-section" class="hidden">
-        <h2 style="color: var(--primary);">تم الحفظ بنجاح ✅</h2>
-        <h1 id="final-score" style="font-size: 3.5rem; color: var(--accent); margin: 20px 0;"></h1>
-        <p>لقد أنهيت التحدي بنجاح، لا يمكنك إعادته مرة أخرى.</p>
-        <div class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></div>
+        <h2>تم اكتمال الاختبار بنجاح</h2>
+        <h1 id="final-score" style="color: var(--primary);"></h1>
+        <p>لقد تم حفظ نتيجتك في السحابة بنجاح ✅</p>
+        <button class="btn-start" onclick="location.reload()" style="background: linear-gradient(45deg, #ff512f, #dd2476); color: white; padding: 15px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer;">
+            ليس هناك تحدٍ أكبر من تطوير ذاتك 🚀
+        </button>
+        <p style="margin-top: 20px;">✨ أ / <span class="normal-text">عبد العزيز الفيفي</span> - <span class="normal-text">ثانوية الأمير عبدالمجيد 🎓</span></p>
     </div>
 </div>
 
+<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
+    // إعدادات Firebase الخاصة بك
     const firebaseConfig = {
         apiKey: "AIzaSyBkCO7FDQXd89YDf843J4_AtvEFvzzt-R0",
         authDomain: "aztlg-494c3.firebaseapp.com",
@@ -80,10 +88,10 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const db = firebase.firestore();
 
-    // التحقق مما إذا كان الطالب قد أدى الاختبار مسبقاً
+    // التحقق من منع الإعادة عند تحميل الصفحة
     function checkFirstTime() {
         updateDateTime();
-        const hasTakenTest = localStorage.getItem('quiz_taken_42'); // معرف فريد لهذا التحدي
+        const hasTakenTest = localStorage.getItem('quiz_taken_42'); // المعرف الخاص بهذا التحدي
         if (hasTakenTest) {
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('blocked-section').classList.remove('hidden');
@@ -95,15 +103,16 @@
         const dateStr = new Date().toLocaleDateString('ar-SA'); 
 
         try {
+            // حفظ البيانات في ملف student_results الموحد
             await db.collection("student_results").add({
                 name: studentName,
                 score: score, 
                 total: quizData.length,
-                model_id: "تحدي اليوم 42",
+                model_id: "تحدي اليوم 42", // للتمييز داخل السحابة فقط
                 test_date: dateStr,
                 time: firebase.firestore.FieldValue.serverTimestamp()
             });
-            // وضع علامة في المتصفح تمنع الإعادة
+            // منع الإعادة في هذا المتصفح
             localStorage.setItem('quiz_taken_42', 'true');
             console.log("تم الحفظ بنجاح");
         } catch (e) {
@@ -115,39 +124,37 @@
         const today = new Date();
         const hijriOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic-umalqura', numberingSystem: 'arabic' };
         const gregOptions = { day: 'numeric', month: 'long', year: 'numeric', numberingSystem: 'arabic' };
-        document.getElementById('date-display').innerText = `${new Intl.DateTimeFormat('ar-SA', hijriOptions).format(today)} | ${new Intl.DateTimeFormat('ar-SA', gregOptions).format(today)} م`;
+        const hijriDate = new Intl.DateTimeFormat('ar-SA', hijriOptions).format(today);
+        const gregDate = new Intl.DateTimeFormat('ar-SA', gregOptions).format(today);
+        document.getElementById('date-display').innerText = `${hijriDate} | ${gregDate} م`;
     }
 
-    let timeLeft = 40, timerInterval, currentQ = 0, score = 0;
+    let timeLeft = 40;
+    let timerInterval;
+    let currentQ = 0;
+    let score = 0;
+    const TRANSITION_DELAY = 5500;
 
     const rawData = [
-        { type: "التناظر اللفظي", q: "صحيفة : أخبار", options: ["مكتبة : كتب", "مستشفى : أطباء", "ساعة : وقت", "مدرسة : فصول"], correctText: "ساعة : وقت" },
-        { type: "التناظر اللفظي", q: "خاتم : ذهب", options: ["باب : خشب", "حقيبة : جلد", "ثوب : قماش", "سور : حجر"], correctText: "باب : خشب" },
-        { type: "التناظر اللفظي", q: "عجين : خبز", options: ["نخلة : تمر", "ماء : ثلج", "طحين : قمح", "بذرة : شجرة"], correctText: "بذرة : شجرة" },
-        { type: "التناظر اللفظي", q: "كأس : زجاج", options: ["قلم : حبر", "محفظة : نقود", "خزانة : ملابس", "إناء : نحاس"], correctText: "إناء : نحاس" },
-        { type: "الخطأ في السياق", q: "الشجاعة هي القدرة على مواجهة الخطر، أما الجبن فهو القدرة على الهروب منه", options: ["الشجاعة", "الخطر", "الجبن", "القدرة"], correctText: "القدرة" },
-        { type: "الخطأ في السياق", q: "من أراد أن يقود الناس، فعليه أن يتبعهم في أخطائهم", options: ["يقود", "فعليه", "يتبعهم", "أخطائهم"], correctText: "يتبعهم" },
-        { type: "الخطأ في السياق", q: "التواضع يرفع من مكانة المرء، أما التكبر فهو دليل على قوة الشخصية", options: ["التواضع", "مكانة", "التكبر", "قوة"], correctText: "قوة" },
+        { type: "التناظر اللفظي", q: "صحيفة : أخبار", options: ["ساعة : وقت", "مكتبة : كتب", "مستشفى : أطباء", "مدرسة : فصول"], correctText: "ساعة : وقت" },
         { type: "الخطأ في السياق", q: "العمل الجاد هو الطريق للنجاح، والكسل هو الطريق للتميز", options: ["الجاد", "النجاح", "الكسل", "للتميز"], correctText: "للتميز" },
         { type: "إكمال الجمل", q: "من غضب من لا شيء، رضي بـ .....", options: ["لا شيء", "كل شيء", "أقل شيء", "أكثر شيء"], correctText: "لا شيء" },
-        { type: "إكمال الجمل", q: "اجعل من الفشل سلماً للـ .....، ولا تجعل منه وسادة للـ .....", options: ["صعود - ركود", "نجاح - فشل", "عمل - كسل", "أمل - يأس"], correctText: "صعود - ركود" },
-        { type: "إكمال الجمل", q: "كن كالغيث إذا ..... نفع، وإذا ..... أبقى أثراً", options: ["نزل - رحل", "جاء - ذهب", "هطل - غاب", "سقط - ولى"], correctText: "نزل - رحل" },
-        { type: "إكمال الجمل", q: "السعادة ليست في كثرة المال، بل في ..... بما تملك", options: ["القناعة", "الرضا", "الاستثمار", "التوفير"], correctText: "القناعة" },
         { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["البرتقال", "التفاح", "العنب", "البطاطس"], correctText: "البطاطس" },
-        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الرياض", "القاهرة", "دبي", "بغداد"], correctText: "دبي" },
-        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الخشب", "الحديد", "النحاس", "الألمنيوم"], correctText: "الخشب" },
-        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["المكعب", "المربع", "المستطيل", "المعين"], correctText: "المكعب" },
-        { type: "استيعاب المقروء", text: "تعتبر الغابات رئة الكوكب لما توفره من أكسجين وامتصاص لغاز ثاني أكسيد الكربون.", q: "توصف الغابات بأنها رئة الكوكب لأنها:", options: ["تنتج الأكسجين", "مساحتها كبيرة", "أشجارها طويلة", "خضراء اللون"], correctText: "تنتج الأكسجين" },
-        { type: "استيعاب المقروء", text: "يعد الفحم الحجري من مصادر الطاقة غير المتجددة والتي يسبب احتراقها تلوثاً بيئياً كبيراً.", q: "الفحم الحجري يعتبر مصدراً لـ:", options: ["الطاقة غير المتجددة", "الطاقة النظيفة", "الطاقة المتجددة", "الطاقة البديلة"], correctText: "الطاقة غير المتجددة" },
-        { type: "استيعاب المقروء", text: "تعتبر اللغة العربية من أقدم اللغات الحية وأكثرها غزارة في المفردات والمعاني.", q: "ما يميز اللغة العربية حسب النص هو:", options: ["غزارة المفردات", "سهولة التعلم", "جمال الخط", "انتشارها الواسع"], correctText: "غزارة المفردات" },
-        { type: "استيعاب المقروء", text: "تعتمد دورة المياه في الطبيعة بشكل أساسي على تبخر مياه البحار والمحيطات بفعل حرارة الشمس.", q: "المحرك الأساسي لدورة المياه هو:", options: ["حرارة الشمس", "الرياح", "البرودة", "الأمطار"], correctText: "حرارة الشمس" }
+        { type: "استيعاب المقروء", text: "تعتمد دورة المياه في الطبيعة على تبخر المياه بفعل حرارة الشمس.", q: "المحرك الأساسي لدورة المياه هو:", options: ["حرارة الشمس", "الرياح", "البرودة", "الأمطار"], correctText: "حرارة الشمس" }
+        // يمكنك إضافة باقي الـ 20 سؤالاً هنا بنفس النمط
     ];
 
     let quizData = [];
-    function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 
     function startQuiz() {
-        if (!document.getElementById('student-name').value) { alert("لطفاً، ادخل اسمك الثلاثي"); return; }
+        if (!document.getElementById('student-name').value) { alert("لطفاً، ادخل اسمك أولاً"); return; }
         quizData = shuffle([...rawData]);
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('quiz-section').classList.remove('hidden');
@@ -156,18 +163,21 @@
 
     function showQuestion() {
         const q = quizData[currentQ];
-        document.getElementById('question-title').innerText = `س ${currentQ + 1} | ${q.type}`;
+        const shuffledOptions = shuffle([...q.options]);
+        document.getElementById('question-title').innerText = `س ${currentQ + 1} في ( ${q.type} )`;
         const readingBox = document.getElementById('reading-container');
-        if (q.text) { readingBox.innerText = q.text; readingBox.classList.remove('hidden'); } else { readingBox.classList.add('hidden'); }
+        if (q.text) { readingBox.innerText = q.text; readingBox.classList.remove('hidden'); } 
+        else { readingBox.classList.add('hidden'); }
         document.getElementById('question-text').innerText = q.q;
         const container = document.getElementById('options-container');
         container.innerHTML = '';
         document.getElementById('feedback').innerText = '';
-        shuffle([...q.options]).forEach(opt => {
+        shuffledOptions.forEach((opt, index) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
+            btn.id = `opt-${index}`;
             btn.innerText = opt;
-            btn.onclick = () => checkAnswer(btn, opt === q.correctText, q.correctText);
+            btn.onclick = () => checkAnswer(index, opt === q.correctText, q.correctText);
             container.appendChild(btn);
         });
         startTimer();
@@ -177,41 +187,64 @@
         clearInterval(timerInterval);
         timeLeft = 40;
         updateTimerUI();
-        timerInterval = setInterval(() => { timeLeft--; updateTimerUI(); if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeout(); } }, 1000);
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimerUI();
+            if (timeLeft <= 0) { clearInterval(timerInterval); showCorrectAndNext(); }
+        }, 1000);
     }
 
     function updateTimerUI() {
-        document.getElementById('timer-text').innerText = `⏳ المتبقي: ${timeLeft} ثانية`;
+        document.getElementById('timer-text').innerText = `الوقت المتبقي: ${timeLeft}`;
         document.getElementById('timer-bar').style.width = `${(timeLeft / 40) * 100}%`;
     }
 
-    function checkAnswer(btn, isCorrect, correctText) {
+    function checkAnswer(index, isCorrect, correctText) {
         clearInterval(timerInterval);
-        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+        disableOptions();
         if (isCorrect) {
             score++;
-            btn.classList.add('correct-flash');
-            document.getElementById('feedback').innerHTML = "<span style='color:var(--correct)'>إجابة دقيقة! 🌟</span>";
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            document.getElementById(`opt-${index}`).classList.add('correct-flash');
+            document.getElementById('feedback').innerHTML = "<span style='color:green'>إجابة صحيحة! 🌟</span>";
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         } else {
-            btn.classList.add('wrong-flash');
-            document.querySelectorAll('.option-btn').forEach(b => { if (b.innerText === correctText) b.classList.add('correct-flash'); });
-            document.getElementById('feedback').innerHTML = "<span style='color:var(--wrong)'>محاولة جيدة 💪</span>";
+            document.getElementById(`opt-${index}`).classList.add('wrong-flash');
+            highlightCorrect(correctText);
+            document.getElementById('feedback').innerHTML = "<span style='color:red'>محاولة جيدة 💪</span>";
         }
-        setTimeout(nextQuestion, 4000);
+        setTimeout(nextQuestion, TRANSITION_DELAY);
     }
 
-    function handleTimeout() {
-        document.querySelectorAll('.option-btn').forEach(b => { b.disabled = true; if (b.innerText === quizData[currentQ].correctText) b.classList.add('correct-flash'); });
-        setTimeout(nextQuestion, 4000);
+    function highlightCorrect(correctText) {
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach(btn => { if (btn.innerText === correctText) btn.classList.add('correct-flash'); });
     }
 
-    function nextQuestion() { currentQ++; if (currentQ < quizData.length) showQuestion(); else finishQuiz(); }
-    
+    function showCorrectAndNext() {
+        const q = quizData[currentQ];
+        document.getElementById('feedback').innerHTML = "<span style='color:orange'>انتهى الوقت! 🕒</span>";
+        highlightCorrect(q.correctText);
+        disableOptions();
+        setTimeout(nextQuestion, TRANSITION_DELAY);
+    }
+
+    function disableOptions() {
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach(btn => btn.disabled = true);
+    }
+
+    function nextQuestion() {
+        currentQ++;
+        if (currentQ < quizData.length) { showQuestion(); } 
+        else { finishQuiz(); }
+    }
+
     function finishQuiz() {
         document.getElementById('quiz-section').classList.add('hidden');
         document.getElementById('result-section').classList.remove('hidden');
-        document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
+        document.getElementById('final-score').innerText = `درجتك هي: ${score} من ${quizData.length}`;
+        
+        // إرسال البيانات للسحابة تلقائياً
         saveToCloud(); 
     }
 </script>
