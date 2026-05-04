@@ -10,7 +10,29 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .quiz-container { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 650px; text-align: center; position: relative; }
         #timer-bar { position: absolute; top: 0; right: 0; height: 6px; background: var(--accent); width: 100%; transition: width 1s linear; border-radius: 15px 15px 0 0; }
-        .option-btn { display: block; width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; background: none; cursor: pointer; transition: 0.3s; font-size: 1.1rem; font-weight: 500; text-align: right; }
+        
+        /* تنسيق الخيارات في الوسط */
+        #options-container { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; /* توسيط الخيارات أفقياً */
+            width: 100%; 
+        }
+        .option-btn { 
+            display: block; 
+            width: 80%; /* عرض محدد للخيارات لتبدو في المنتصف */
+            padding: 12px; 
+            margin: 10px 0; 
+            border: 2px solid #ddd; 
+            border-radius: 8px; 
+            background: none; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-size: 1.1rem; 
+            font-weight: 500; 
+            text-align: center; /* نص الخيار في منتصف الزر */
+        }
+
         .correct-flash { background-color: #e8f5e9 !important; border-color: var(--correct) !important; color: var(--correct); border-width: 3px !important; }
         .wrong-flash { background-color: #ffeeb2 !important; border-color: var(--wrong) !important; color: var(--wrong); }
         .hidden { display: none; }
