@@ -62,7 +62,6 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
-    // إعدادات Firebase الخاصة بك
     const firebaseConfig = {
         apiKey: "AIzaSyBkCO7FDQXd89YDf843J4_AtvEFvzzt-R0",
         authDomain: "aztlg-494c3.firebaseapp.com",
@@ -87,7 +86,7 @@
                 model_id: "تحدي اليوم 40", 
                 time: firebase.firestore.FieldValue.serverTimestamp()
             });
-            console.log("تم الحفظ بنجاح في السحابة");
+            console.log("تم الحفظ بنجاح");
         } catch (e) {
             console.error("خطأ في السحابة:", e);
         }
@@ -103,7 +102,6 @@
     let timeLeft = 40, timerInterval, currentQ = 0, score = 0;
 
     const rawData = [
-        // --- 20 سؤالاً (تم رفع مستوى التناظر والخطأ السياقي) ---
         { type: "التناظر اللفظي", q: "ضجيج : سكون", options: ["خداع : رياء", "كدر : صفاء", "حرارة : نار", "ليل : ظلام"], correctText: "كدر : صفاء" },
         { type: "التناظر اللفظي", q: "فيافي : قفر", options: ["بيداء : فلات", "مدن : عمران", "بحار : عمق", "نجوم : ضياء"], correctText: "بيداء : فلات" },
         { type: "التناظر اللفظي", q: "أتون : حرارة", options: ["مروحة : هواء", "مذياع : صوت", "مصباح : وهج", "مطر : برودة"], correctText: "مصباح : وهج" },
@@ -196,7 +194,7 @@
         document.getElementById('result-section').classList.remove('hidden');
         document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
 
-         إرسال البيانات للسحابة تلقائياً
+        // إرسال البيانات للسحابة تلقائياً
         saveToCloud(); 
     }
 </script>
