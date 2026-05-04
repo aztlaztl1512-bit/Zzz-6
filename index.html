@@ -3,26 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحدي اليوم - أ/ عبدالعزيز الفيفي</title>
+    <title>تحدي اليوم (40) - أ/ عبدالعزيز الفيفي</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --primary: #4a148c; --secondary: #7b1fa2; --bg: #f5f5f5; --accent: #ff9800; --correct: #2e7d32; --wrong: #c62828; }
+        :root { --primary: #1a237e; --secondary: #311b92; --bg: #f8f9fa; --accent: #f57c00; --correct: #1b5e20; --wrong: #b71c1c; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .quiz-container { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 650px; text-align: center; position: relative; }
-        #timer-bar { position: absolute; top: 0; right: 0; height: 6px; background: var(--accent); width: 100%; transition: width 1s linear; border-radius: 15px 15px 0 0; }
-        .option-btn { display: block; width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; background: none; cursor: pointer; transition: 0.3s; font-size: 1.1rem; font-weight: 500; }
+        .quiz-container { background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); width: 95%; max-width: 700px; text-align: center; position: relative; border-top: 8px solid var(--primary); }
+        #timer-bar { position: absolute; top: 0; right: 0; height: 8px; background: var(--accent); width: 100%; transition: width 1s linear; border-radius: 20px 20px 0 0; }
+        .option-btn { display: block; width: 100%; padding: 14px; margin: 12px 0; border: 2px solid #e0e0e0; border-radius: 10px; background: #fff; cursor: pointer; transition: all 0.3s ease; font-size: 1.1rem; font-weight: 500; color: #333; text-align: right; }
+        .option-btn:hover { border-color: var(--secondary); background-color: #f3e5f5; }
         .correct-flash { background-color: #e8f5e9 !important; border-color: var(--correct) !important; color: var(--correct); border-width: 3px !important; }
-        .wrong-flash { background-color: #ffeeb2 !important; border-color: var(--wrong) !important; color: var(--wrong); }
+        .wrong-flash { background-color: #ffebee !important; border-color: var(--wrong) !important; color: var(--wrong); }
         .hidden { display: none; }
-        .reading-text { background: #fff9c4; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: right; font-size: 1rem; border-right: 5px solid var(--accent); line-height: 1.6; }
-        input[type="text"] { width: 85%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 2px solid #ddd; font-size: 1rem; text-align: center; }
-        .btn-start { background: var(--primary); color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; }
-        #feedback { margin-top: 15px; font-weight: bold; font-size: 1.1rem; min-height: 1.5em; }
-        #timer-text { font-weight: bold; color: var(--accent); margin-bottom: 10px; }
-        .copyright { font-size: 0.85rem; color: #666; margin-top: 25px; border-top: 1px solid #eee; padding-top: 10px; }
-
-        .normal-text { color: #000; font-weight: normal; font-size: 0.85rem; }
-        .date-red-small { color: #e53e3e; font-size: 0.85rem; font-weight: bold; margin: 10px 0; display: inline-block; }
+        .reading-text { background: #fffde7; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: right; font-size: 1.05rem; border-right: 6px solid var(--accent); line-height: 1.8; color: #444; }
+        input[type="text"] { width: 85%; padding: 15px; margin-bottom: 25px; border-radius: 10px; border: 2px solid #ddd; font-size: 1.1rem; text-align: center; outline: none; }
+        .btn-start { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 15px 40px; border: none; border-radius: 12px; cursor: pointer; font-size: 1.2rem; font-weight: bold; }
+        #feedback { margin-top: 20px; font-weight: bold; font-size: 1.2rem; min-height: 1.6em; }
+        #timer-text { font-weight: bold; color: var(--wrong); margin-bottom: 15px; }
+        .copyright { font-size: 0.9rem; color: #777; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px; }
+        .date-badge { background: #eee; color: var(--wrong); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; margin-bottom: 15px; display: inline-block; }
     </style>
 </head>
 <body onload="updateDateTime()">
@@ -31,146 +30,107 @@
     <div id="timer-bar"></div>
     
     <div id="login-section">
-        <h2 style="color: var(--primary);">( تحدي اليوم )</h2>
-        
-        <div id="date-display" class="date-red-small">جاري تحميل التاريخ...</div>
-        
-        <div class="copyright">أ/ <span class="normal-text">عبدالعزيز الفيفي</span> - <span class="normal-text">ثانوية الأمير عبدالمجيد 🎓</span></div>
-        <p></p>
-        <input type="text" id="student-name" placeholder="أدخل اسمك الثلاثي لتبدأ...">
+        <h1 style="color: var(--primary);">تحدي اليوم ( 40 ) ☁️</h1>
+        <div id="date-display" class="date-badge">جاري التحميل...</div>
+        <p>نموذج مربوط بالسحابة - 20 سؤالاً 🚀</p>
+        <input type="text" id="student-name" placeholder="أدخل اسمك الثلاثي للبدء...">
         <br>
-        <button class="btn-start" onclick="startQuiz()">بدأ الاختبار</button>
+        <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن</button>
+        <div class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></div>
     </div>
 
     <div id="quiz-section" class="hidden">
-        <div id="timer-text">الوقت المتبقي: 40</div>
-        <h3 id="question-title" style="color: var(--secondary); margin-bottom: 5px;"></h3>
+        <div id="timer-text">⏳ المتبقي: 40 ثانية</div>
+        <h3 id="question-title" style="color: var(--secondary); margin-bottom: 10px;"></h3>
         <div id="reading-container" class="reading-text hidden"></div>
-        <h2 id="question-text" style="margin-top: 5px;"></h2>
+        <h2 id="question-text" style="margin: 15px 0;"></h2>
         <div id="options-container"></div>
         <div id="feedback"></div>
-        <div class="copyright"> أ/ <span class="normal-text">عبدالعزيز الفيفي</span> - <span class="normal-text">ثانوية الأمير عبدالمجيد 🎓</span></div>
+        <div class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></div>
     </div>
 
     <div id="result-section" class="hidden">
-        <h2>تم اكتمال الاختبار بنجاح</h2>
-        <h1 id="final-score" style="color: var(--primary);"></h1>
-        <link href="https://fonts.googleapis.com" rel="stylesheet">
-
-        <button class="btn-start" onclick="location.reload()" style="
-            background: linear-gradient(45deg, #ff512f, #dd2476);
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 50px;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(221, 36, 118, 0.4);
-            transition: transform 0.3s ease;
-            direction: rtl;
-        ">
-            ليس هناك تحدٍ أكبر من تطوير ذاتك؛ أعد الكرة الآن 🚀 أو كُن النسخة الأفضل غداً 🔥✨
-        </button>
-
-        <style>
-            .btn-start:hover {
-                transform: scale(1.05);
-                box-shadow: 0 6px 20px rgba(221, 36, 118, 0.6);
-            }
-        </style>
-
-        <p style="margin-top: 20px;">✨ أ / <span class="normal-text">عبد العزيز الفيفي</span> - <span class="normal-text">ثانوية الأمير عبدالمجيد 🎓</span></p>
+        <h2 style="color: var(--primary);">تم الحفظ في السحابة بنجاح ✅</h2>
+        <h1 id="final-score" style="font-size: 3.5rem; color: var(--accent); margin: 20px 0;"></h1>
+        <button class="btn-start" onclick="location.reload()">أعد الكرة.. طور ذاتك 🔄</button>
+        <p class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></p>
     </div>
 </div>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
 <script>
+    // إعدادات Firebase الخاصة بك
+    const firebaseConfig = {
+        apiKey: "AIzaSyBkCO7FDQXd89YDf843J4_AtvEFvzzt-R0",
+        authDomain: "aztlg-494c3.firebaseapp.com",
+        projectId: "aztlg-494c3",
+        storageBucket: "aztlg-494c3.firebasestorage.app",
+        messagingSenderId: "597051893949",
+        appId: "1:597051893949:web:de5554ac900317a92b2fd4"
+    };
+    
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    const db = firebase.firestore();
+
+    async function saveToCloud() {
+        const studentName = document.getElementById('student-name').value;
+        const dateStr = new Date().toLocaleDateString('ar-SA'); 
+
+        try {
+            await db.collection("student_results").add({
+                name: studentName + " (" + dateStr + ")",
+                score: score, 
+                total: quizData.length,
+                model_id: "تحدي اليوم 40", 
+                time: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            console.log("تم الحفظ بنجاح في السحابة");
+        } catch (e) {
+            console.error("خطأ في السحابة:", e);
+        }
+    }
+
     function updateDateTime() {
         const today = new Date();
         const hijriOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic-umalqura', numberingSystem: 'arabic' };
         const gregOptions = { day: 'numeric', month: 'long', year: 'numeric', numberingSystem: 'arabic' };
-        
-        const hijriDate = new Intl.DateTimeFormat('ar-SA', hijriOptions).format(today);
-        const gregDate = new Intl.DateTimeFormat('ar-SA', gregOptions).format(today);
-        
-        document.getElementById('date-display').innerText = `${hijriDate} | ${gregDate} م`;
+        document.getElementById('date-display').innerText = `${new Intl.DateTimeFormat('ar-SA', hijriOptions).format(today)} | ${new Intl.DateTimeFormat('ar-SA', gregOptions).format(today)} م`;
     }
 
-    let timeLeft = 40;
-    let timerInterval;
-    let currentQ = 0;
-    let score = 0;
-    const TRANSITION_DELAY = 5500;
+    let timeLeft = 40, timerInterval, currentQ = 0, score = 0;
 
     const rawData = [
-        // --- 1. التناظر اللفظي ---
-        { type: "التناظر اللفظي", q: "جناح : طائر", options: ["زعنفة : سمكة", "شراع : سفينة", "عجلة : سيارة", "حافر : حصان"], correctText: "زعنفة : سمكة" },
-        { type: "التناظر اللفظي", q: "تعب : نوم", options: ["جوع : طعام", "مرض : دواء", "نجاح : فخر", "عطش : ماء"], correctText: "جوع : طعام" },
-        { type: "التناظر اللفظي", q: "سماء : نجوم", options: ["بحر : أسماك", "غابة : أشجار", "كتاب : كلمات", "فصل : طلاب"], correctText: "بحر : أسماك" },
-        { type: "التناظر اللفظي", q: "منشار : خشب", options: ["سكين : لحم", "مبرد : حديد", "قلم : ورقة", "مقص : قماش"], correctText: "مقص : قماش" },
-
-        // --- 2. إكمال الجمل ---
-        { type: "إكمال الجمل", q: "من اعتاد على .....، لم يعرف طعم .....", options: ["الراحة - النجاح", "العمل - التعب", "الصبر - الفرج", "الكسل - الهم"], correctText: "الراحة - النجاح" },
-        { type: "إكمال الجمل", q: "المستحيل هو كلمة لا توجد إلا في قاموس .....", options: ["الضعفاء", "الجبناء", "الفاشلين", "العاجزين"], correctText: "الضعفاء" },
-        { type: "إكمال الجمل", q: "كن كـ ..... في الارتفاع، وكـ ..... في النفع", options: ["النخلة - الغيث", "الجبل - النهر", "النجم - الشمس", "السحاب - المطر"], correctText: "النخلة - الغيث" },
-        { type: "إكمال الجمل", q: "الاعتذار لا يعني دائماً أنك على خطأ، بل يعني أنك تقدر ..... أكثر من كبريائك", options: ["العلاقة", "الشخص", "الاحترام", "الود"], correctText: "العلاقة" },
-
-        // --- 3. المفردة الشاذة ---
-        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الأكسجين", "النيتروجين", "الهيدروجين", "الماء"], correctText: "الماء" },
-        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الخليل", "يافا", "حيفا", "عمان"], correctText: "عمان" },
-        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["البط", "الإوز", "الدجاج", "النسر"], correctText: "النسر" },
-        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الحديد", "الفوسفور", "الكربون", "الكبريت"], correctText: "الحديد" },
-
-        // --- 4. الخطأ في السياق ---
-        { type: "الخطأ في السياق", q: "الصديق الحقيقي هو من يمسك يدك عندما تكون في القمة ليدفعك للأسفل", options: ["الحقيقي", "يدسك", "القمة", "للأسفل"], correctText: "للأسفل" },
-        { type: "الخطأ في السياق", q: "إن كثرة الكلام بغير فائدة دليل على قوة العقل ورجاحة الفكر", options: ["كثرة", "فائدة", "قوة", "رجاحة"], correctText: "قوة" },
-        { type: "الخطأ في السياق", q: "التعليم هو السلاح الأضعف الذي يمكنك استخدامه لتغيير العالم", options: ["التعليم", "السلاح", "الأضعف", "لتغيير"], correctText: "الأضعف" },
-        { type: "الخطأ في السياق", q: "من السهل أن تضع خطة للنجاح، لكن من الصعب أن تفشل في تنفيذها", options: ["السهل", "خطة", "الصعب", "تفشل"], correctText: "تفشل" },
-
-        // --- 5. استيعاب المقروء ---
-        { 
-            type: "استيعاب المقروء", 
-            text: "تعتبر الطباعة ثلاثية الأبعاد تقنية ثورية تسمح ببناء أجسام مادية من ملفات رقمية عن طريق وضع طبقات رقيقة من المواد فوق بعضها.",
-            q: "تعتمد الطباعة ثلاثية الأبعاد في إنتاج الأجسام على نظام:", 
-            options: ["النحت", "الطبقات المتراكمة", "الصب بالقوالب", "الرسم اليدوي"], 
-            correctText: "الطبقات المتراكمة" 
-        },
-        { 
-            type: "استيعاب المقروء", 
-            text: "تتميز الطيور المهاجرة بقدرة مذهلة على الملاحة باستخدام المجال المغناطيسي للأرض ومواقع النجوم لتحديد مسارها بدقة.",
-            q: "تعتمد الطيور المهاجرة في تحديد طريقها بشكل أساسي على:", 
-            options: ["المجال المغناطيسي", "سرعة الرياح", "درجة الحرارة", "البحث عن الطعام"], 
-            correctText: "المجال المغناطيسي" 
-        },
-        { 
-            type: "استيعاب المقروء", 
-            text: "يعد الفيتامين (د) ضرورياً لامتصاص الكالسيوم وتقوية العظام، ويحصل عليه الجسم بشكل أساسي من التعرض الآمن لأشعة الشمس.",
-            q: "المصدر الرئيسي للحصول على فيتامين (د) كما ذكر النص هو:", 
-            options: ["الخضروات", "أشعة الشمس", "الأسماك", "التمارين الرياضية"], 
-            correctText: "أشعة الشمس" 
-        },
-        { 
-            type: "استيعاب المقروء", 
-            text: "تمثل المحيطات أكثر من 70% من مساحة سطح الأرض، وهي تلعب دوراً حيوياً في تنظيم المناخ وتوفير الأكسجين.",
-            q: "الوظيفة المناخية للمحيطات كما فهمت من النص هي:", 
-            options: ["توليد الأمواج", "تنظيم المناخ", "زيادة الأملاح", "حفظ الأسماك"], 
-            correctText: "تنظيم المناخ" 
-        }
+        // --- 20 سؤالاً (تم رفع مستوى التناظر والخطأ السياقي) ---
+        { type: "التناظر اللفظي", q: "ضجيج : سكون", options: ["خداع : رياء", "كدر : صفاء", "حرارة : نار", "ليل : ظلام"], correctText: "كدر : صفاء" },
+        { type: "التناظر اللفظي", q: "فيافي : قفر", options: ["بيداء : فلات", "مدن : عمران", "بحار : عمق", "نجوم : ضياء"], correctText: "بيداء : فلات" },
+        { type: "التناظر اللفظي", q: "أتون : حرارة", options: ["مروحة : هواء", "مذياع : صوت", "مصباح : وهج", "مطر : برودة"], correctText: "مصباح : وهج" },
+        { type: "التناظر اللفظي", q: "حجة : برهان", options: ["خوف : ذعر", "قوة : شجاعة", "علم : فهم", "صمت : حديث"], correctText: "خوف : ذعر" },
+        { type: "الخطأ في السياق", q: "إن طول العمر لا يقاس بالسنين، بل بما حققه الإنسان من فشل في حياته يخلد ذكره", options: ["العمر", "بالسنين", "حققه", "فشل"], correctText: "فشل" },
+        { type: "الخطأ في السياق", q: "عظمة عقلك تخلق لك الحساد، وعظمة قلبك تخلق لك الأعداء الذين يحبونك", options: ["عظمة", "الحساد", "الأعداء", "يحبونك"], correctText: "الأعداء" },
+        { type: "الخطأ في السياق", q: "الابتسامة هي الجسر الأقصر بين القلوب، وهي أقوى وسيلة لتبديد المحبة بين الناس", options: ["الجسر", "القلوب", "تبديد", "المحبة"], correctText: "المحبة" },
+        { type: "الخطأ في السياق", q: "المتواضع من إذا رأى من هو دونه في العلم قال: هذا أوتي أقل مما أوتيت أنا فربما هو أفضل", options: ["المتواضع", "دونه", "أقل", "أفضل"], correctText: "أقل" },
+        { type: "إكمال الجمل", q: "من أراد حلاوة ..... فليصبر على مرارة .....", options: ["العسل - اللسع", "النجاح - الفشل", "الراحة - السهر", "الفوز - التعب"], correctText: "العسل - اللسع" },
+        { type: "إكمال الجمل", q: "يعد ..... من أهم وسائل التفاهم بين الشعوب، وبدونه تسود .....", options: ["الحوار - الفوضى", "المال - التجارة", "العلم - الجهل", "السفر - الغربة"], correctText: "الحوار - الفوضى" },
+        { type: "إكمال الجمل", q: "من زاد حبه لنفسه زاد ..... الناس له", options: ["جفاء", "تقدير", "احترام", "قرب"], correctText: "جفاء" },
+        { type: "إكمال الجمل", q: "إن الرقابة ..... نابعة من الوجدان لا من خوف العقاب الخارجي", options: ["الذاتية", "الأسرية", "الدولية", "القانونية"], correctText: "الذاتية" },
+        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["القسط", "العدل", "الإنصاف", "الظلم"], correctText: "الظلم" },
+        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الذهب", "الفضة", "الماس", "النحاس"], correctText: "الماس" },
+        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الجمعة", "السبت", "الأحد", "الاثنين"], correctText: "الجمعة" },
+        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الخشب", "الحديد", "الألمنيوم", "النحاس"], correctText: "الخشب" },
+        { type: "استيعاب المقروء", text: "تعتبر (المياه الافتراضية) أداة استراتيجية لتقدير حجم المياه المستهلكة في إنتاج السلع.", q: "الهدف الجوهري من مفهوم المياه الافتراضية هو:", options: ["ترشيد استهلاك المياه القومي", "زيادة صادرات القمح", "حساب تكلفة النقل", "تحديد أسعار السلع"], correctText: "ترشيد استهلاك المياه القومي" },
+        { type: "استيعاب المقروء", text: "البرمجيات المفتوحة المصدر تتيح للمطورين التعاون في تحسين الأكواد.", q: "المحرك الأساسي للابتكار فيها هو:", options: ["التعاون الجماعي", "الربح المادي", "التنافس التجاري", "حماية الملكية"], correctText: "التعاون الجماعي" },
+        { type: "استيعاب المقروء", text: "الذاكرة العاملة تخزن المعلومات لفترة وجيزة جداً.", q: "علاقتها بالذاكرة طويلة الأمد هي علاقة:", options: ["مرحلية تمهيدية", "تضادية عكسية", "تطابق وظيفي", "استقلالية تامة"], correctText: "مرحلية تمهيدية" },
+        { type: "استيعاب المقروء", text: "الغيوم الركامية تنشأ نتيجة تيارات هوائية صاعدة قوية.", q: "الصفة التي تجعلها مرتبطة بالعواصف هي:", options: ["التيارات الصاعدة", "لونها الأبيض", "قواعدها المرتفعة", "شكلها الجبلي"], correctText: "التيارات الصاعدة" }
     ];
 
     let quizData = [];
-
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
+    function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
     function startQuiz() {
-        if (!document.getElementById('student-name').value) { alert("لطفاً، ادخل اسمك أولاً"); return; }
+        if (!document.getElementById('student-name').value) { alert("لطفاً، ادخل اسمك الثلاثي"); return; }
         quizData = shuffle([...rawData]);
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('quiz-section').classList.remove('hidden');
@@ -179,21 +139,18 @@
 
     function showQuestion() {
         const q = quizData[currentQ];
-        const shuffledOptions = shuffle([...q.options]);
-        document.getElementById('question-title').innerText = `س ${currentQ + 1} في ( ${q.type} )`;
+        document.getElementById('question-title').innerText = `س ${currentQ + 1} | ${q.type}`;
         const readingBox = document.getElementById('reading-container');
-        if (q.text) { readingBox.innerText = q.text; readingBox.classList.remove('hidden'); } 
-        else { readingBox.classList.add('hidden'); }
+        if (q.text) { readingBox.innerText = q.text; readingBox.classList.remove('hidden'); } else { readingBox.classList.add('hidden'); }
         document.getElementById('question-text').innerText = q.q;
         const container = document.getElementById('options-container');
         container.innerHTML = '';
         document.getElementById('feedback').innerText = '';
-        shuffledOptions.forEach((opt, index) => {
+        shuffle([...q.options]).forEach(opt => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
-            btn.id = `opt-${index}`;
             btn.innerText = opt;
-            btn.onclick = () => checkAnswer(index, opt === q.correctText, q.correctText);
+            btn.onclick = () => checkAnswer(btn, opt === q.correctText, q.correctText);
             container.appendChild(btn);
         });
         startTimer();
@@ -203,62 +160,44 @@
         clearInterval(timerInterval);
         timeLeft = 40;
         updateTimerUI();
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            updateTimerUI();
-            if (timeLeft <= 0) { clearInterval(timerInterval); showCorrectAndNext(); }
-        }, 1000);
+        timerInterval = setInterval(() => { timeLeft--; updateTimerUI(); if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeout(); } }, 1000);
     }
 
     function updateTimerUI() {
-        document.getElementById('timer-text').innerText = `الوقت المتبقي: ${timeLeft}`;
+        document.getElementById('timer-text').innerText = `⏳ المتبقي: ${timeLeft} ثانية`;
         document.getElementById('timer-bar').style.width = `${(timeLeft / 40) * 100}%`;
     }
 
-    function checkAnswer(index, isCorrect, correctText) {
+    function checkAnswer(btn, isCorrect, correctText) {
         clearInterval(timerInterval);
-        disableOptions();
+        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
         if (isCorrect) {
             score++;
-            document.getElementById(`opt-${index}`).classList.add('correct-flash');
-            document.getElementById('feedback').innerHTML = "<span style='color:green'>إجابة صحيحة! أحسنت يا بطل 🌟</span>";
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            btn.classList.add('correct-flash');
+            document.getElementById('feedback').innerHTML = "<span style='color:var(--correct)'>إجابة دقيقة! 🌟</span>";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         } else {
-            document.getElementById(`opt-${index}`).classList.add('wrong-flash');
-            highlightCorrect(correctText);
-            document.getElementById('feedback').innerHTML = "<span style='color:red'>محاولة جيدة، واصل.. 💪 (الصواب بالأخضر)</span>";
+            btn.classList.add('wrong-flash');
+            document.querySelectorAll('.option-btn').forEach(b => { if (b.innerText === correctText) b.classList.add('correct-flash'); });
+            document.getElementById('feedback').innerHTML = "<span style='color:var(--wrong)'>محاولة جيدة 💪</span>";
         }
-        setTimeout(nextQuestion, TRANSITION_DELAY);
+        setTimeout(nextQuestion, 4000);
     }
 
-    function highlightCorrect(correctText) {
-        const btns = document.querySelectorAll('.option-btn');
-        btns.forEach(btn => { if (btn.innerText === correctText) btn.classList.add('correct-flash'); });
+    function handleTimeout() {
+        document.querySelectorAll('.option-btn').forEach(b => { b.disabled = true; if (b.innerText === quizData[currentQ].correctText) b.classList.add('correct-flash'); });
+        setTimeout(nextQuestion, 4000);
     }
 
-    function showCorrectAndNext() {
-        const q = quizData[currentQ];
-        document.getElementById('feedback').innerHTML = "<span style='color:orange'>انتهى الوقت! الصواب موضح بالأخضر.. واصل 💪</span>";
-        highlightCorrect(q.correctText);
-        disableOptions();
-        setTimeout(nextQuestion, TRANSITION_DELAY);
-    }
-
-    function disableOptions() {
-        const btns = document.querySelectorAll('.option-btn');
-        btns.forEach(btn => btn.disabled = true);
-    }
-
-    function nextQuestion() {
-        currentQ++;
-        if (currentQ < quizData.length) { showQuestion(); } 
-        else { finishQuiz(); }
-    }
-
+    function nextQuestion() { currentQ++; if (currentQ < quizData.length) showQuestion(); else finishQuiz(); }
+    
     function finishQuiz() {
         document.getElementById('quiz-section').classList.add('hidden');
         document.getElementById('result-section').classList.remove('hidden');
-        document.getElementById('final-score').innerText = `درجتك هي: ${score} من ${quizData.length}`;
+        document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
+
+         إرسال البيانات للسحابة تلقائياً
+        saveToCloud(); 
     }
 </script>
 </body>
