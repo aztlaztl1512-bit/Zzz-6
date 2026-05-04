@@ -3,57 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحدي اليوم (41) - أ/ عبدالعزيز الفيفي</title>
+    <title>تحدي اليوم</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root { --primary: #1a237e; --secondary: #311b92; --bg: #f8f9fa; --accent: #f57c00; --correct: #1b5e20; --wrong: #b71c1c; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .quiz-container { background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); width: 95%; max-width: 700px; text-align: center; position: relative; border-top: 8px solid var(--primary); }
         #timer-bar { position: absolute; top: 0; right: 0; height: 8px; background: var(--accent); width: 100%; transition: width 1s linear; border-radius: 20px 20px 0 0; }
-        .option-btn { display: block; width: 100%; padding: 14px; margin: 12px 0; border: 2px solid #e0e0e0; border-radius: 10px; background: #fff; cursor: pointer; transition: all 0.3s ease; font-size: 1.1rem; font-weight: 500; color: #333; text-align: right; }
-        .option-btn:hover { border-color: var(--secondary); background-color: #f3e5f5; }
-        .correct-flash { background-color: #e8f5e9 !important; border-color: var(--correct) !important; color: var(--correct); border-width: 3px !important; }
+        .option-btn { display: block; width: 100%; padding: 14px; margin: 12px 0; border: 2px solid #e0e0e0; border-radius: 10px; background: #fff; cursor: pointer; transition: 0.3s; font-size: 1.1rem; text-align: right; }
+        .correct-flash { background-color: #e8f5e9 !important; border-color: var(--correct) !important; color: var(--correct); }
         .wrong-flash { background-color: #ffebee !important; border-color: var(--wrong) !important; color: var(--wrong); }
         .hidden { display: none; }
-        .reading-text { background: #fffde7; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: right; font-size: 1.05rem; border-right: 6px solid var(--accent); line-height: 1.8; color: #444; }
-        input[type="text"] { width: 85%; padding: 15px; margin-bottom: 25px; border-radius: 10px; border: 2px solid #ddd; font-size: 1.1rem; text-align: center; outline: none; }
+        .reading-text { background: #fffde7; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: right; border-right: 6px solid var(--accent); line-height: 1.8; }
+        input[type="text"] { width: 85%; padding: 15px; margin-bottom: 25px; border-radius: 10px; border: 2px solid #ddd; font-size: 1.1rem; text-align: center; }
         .btn-start { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 15px 40px; border: none; border-radius: 12px; cursor: pointer; font-size: 1.2rem; font-weight: bold; }
-        #feedback { margin-top: 20px; font-weight: bold; font-size: 1.2rem; min-height: 1.6em; }
-        #timer-text { font-weight: bold; color: var(--wrong); margin-bottom: 15px; }
         .copyright { font-size: 0.9rem; color: #777; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px; }
         .date-badge { background: #eee; color: var(--wrong); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; margin-bottom: 15px; display: inline-block; }
     </style>
 </head>
-<body onload="updateDateTime()">
+<body onload="checkFirstTime()">
 
 <div class="quiz-container">
     <div id="timer-bar"></div>
     
+    <!-- قسم الدخول -->
     <div id="login-section">
-        <h1 style="color: var(--primary);">تحدي اليوم ( 41 ) ☁️</h1>
+        <h1 style="color: var(--primary);">تحدي اليوم ☁️</h1>
         <div id="date-display" class="date-badge">جاري التحميل...</div>
-        <p>نموذج مربوط بالسحابة - 20 سؤالاً 🚀</p>
+        <p>اختبار مربوط بالسحابة - 20 سؤالاً 🚀</p>
         <input type="text" id="student-name" placeholder="أدخل اسمك الثلاثي للبدء...">
         <br>
         <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن</button>
         <div class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></div>
     </div>
 
+    <!-- قسم منع الإعادة -->
+    <div id="blocked-section" class="hidden">
+        <h2 style="color: var(--wrong);">عذراً.. لا يمكن إعادة الاختبار!</h2>
+        <p>لقد قمت بتأدية هذا التحدي مسبقاً من هذا الجهاز.</p>
+        <div class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></div>
+    </div>
+
+    <!-- قسم الأسئلة -->
     <div id="quiz-section" class="hidden">
-        <div id="timer-text">⏳ المتبقي: 40 ثانية</div>
+        <div id="timer-text" style="font-weight:bold; color:var(--wrong); margin-bottom:10px;">⏳ المتبقي: 40 ثانية</div>
         <h3 id="question-title" style="color: var(--secondary); margin-bottom: 10px;"></h3>
         <div id="reading-container" class="reading-text hidden"></div>
         <h2 id="question-text" style="margin: 15px 0;"></h2>
         <div id="options-container"></div>
-        <div id="feedback"></div>
+        <div id="feedback" style="margin-top:20px; font-weight:bold;"></div>
         <div class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></div>
     </div>
 
+    <!-- قسم النتيجة -->
     <div id="result-section" class="hidden">
         <h2 style="color: var(--primary);">تم الحفظ بنجاح ✅</h2>
         <h1 id="final-score" style="font-size: 3.5rem; color: var(--accent); margin: 20px 0;"></h1>
-        <button class="btn-start" onclick="location.reload()">أعد الكرة.. طور ذاتك 🔄</button>
-        <p class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></p>
+        <p>لقد أنهيت التحدي بنجاح، لا يمكنك إعادته مرة أخرى.</p>
+        <div class="copyright">أ/ <span style="color:#000">عبدالعزيز الفيفي</span> - <span style="color:#000">ثانوية الأمير عبدالمجيد 🎓</span></div>
     </div>
 </div>
 
@@ -73,20 +80,31 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const db = firebase.firestore();
 
+    // التحقق مما إذا كان الطالب قد أدى الاختبار مسبقاً
+    function checkFirstTime() {
+        updateDateTime();
+        const hasTakenTest = localStorage.getItem('quiz_taken_42'); // معرف فريد لهذا التحدي
+        if (hasTakenTest) {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('blocked-section').classList.remove('hidden');
+        }
+    }
+
     async function saveToCloud() {
         const studentName = document.getElementById('student-name').value;
         const dateStr = new Date().toLocaleDateString('ar-SA'); 
 
         try {
-            // جميع النتائج تصب في ملف واحد اسمه student_results
             await db.collection("student_results").add({
                 name: studentName,
                 score: score, 
                 total: quizData.length,
-                model_id: "تحدي اليوم 41", // تمييز التحدي داخل الملف
-                test_date: dateStr, // ظهور تاريخ التحدي لكل طالب
+                model_id: "تحدي اليوم 42",
+                test_date: dateStr,
                 time: firebase.firestore.FieldValue.serverTimestamp()
             });
+            // وضع علامة في المتصفح تمنع الإعادة
+            localStorage.setItem('quiz_taken_42', 'true');
             console.log("تم الحفظ بنجاح");
         } catch (e) {
             console.error("خطأ في السحابة:", e);
@@ -103,27 +121,26 @@
     let timeLeft = 40, timerInterval, currentQ = 0, score = 0;
 
     const rawData = [
-        // --- 20 سؤالاً متنوعاً ومنوعاً ---
-        { type: "التناظر اللفظي", q: "غمد : سيف", options: ["خاتم : إصبع", "حقيبة : كتب", "عرين : أسد", "درع : محارب"], correctText: "عرين : أسد" },
-        { type: "التناظر اللفظي", q: "أنين : ألم", options: ["ضحك : سرور", "دموع : حزن", "صراخ : خوف", "نوم : راحة"], correctText: "سرور : ضحك" },
-        { type: "التناظر اللفظي", q: "شعر : قصيدة", options: ["خشب : طاولة", "لبنة : جدار", "غصن : شجرة", "كلمة : كتاب"], correctText: "لبنة : جدار" },
-        { type: "التناظر اللفظي", q: "سماء : نجوم", options: ["بحر : أسماك", "حديقة : أشجار", "غابة : حيوانات", "مكتبة : كتب"], correctText: "بحر : أسماك" },
-        { type: "الخطأ في السياق", q: "المتفائل يرى ضوءاً في كل ظلام، أما المتشائم فيطفئ الضوء ليرى الظلام", options: ["المتفائل", "ضوءاً", "المتشائم", "ليطفئ"], correctText: "ليطفئ" },
-        { type: "الخطأ في السياق", q: "من زاد حبه لنفسه زاد كره الناس له", options: ["زاد", "حبه", "كره", "الناس"], correctText: "كره" },
-        { type: "الخطأ في السياق", q: "الاعتراف بالخطأ يقلل من هيبة الشخص أمام الآخرين", options: ["الاعتراف", "يقلل", "هيبة", "الآخرين"], correctText: "يقلل" },
-        { type: "الخطأ في السياق", q: "العمل الجماعي يقلل الجهد ويزيد الإنجازات", options: ["الجماعي", "يقلل", "الجهد", "الإنجازات"], correctText: "الجماعي" },
-        { type: "إكمال الجمل", q: "من أراد حلاوة النجاح فليصبر على مرارة .....", options: ["التعب", "السهر", "الفشل", "الجد"], correctText: "التعب" },
-        { type: "إكمال الجمل", q: "يعد الحوار من أهم وسائل ..... بين الشعوب", options: ["التفاهم", "التعاون", "التقارب", "التعارف"], correctText: "التفاهم" },
-        { type: "إكمال الجمل", q: "القناعة كنز لا يفنى، ومن رضي بما قسمه الله له .....", options: ["سعد", "غني", "استراح", "نجح"], correctText: "سعد" },
-        { type: "إكمال الجمل", q: "العلم يرفع بيوتاً لا عماد لها، والجهل يهدم بيت .....", options: ["العز والكرم", "الأمل والرجاء", "الحلم والعمل", "الصبر والقوة"], correctText: "العز والكرم" },
-        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الأسد", "النمر", "الفهد", "الخروف"], correctText: "الخروف" },
-        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الرياض", "مكة", "دبي", "المدينة"], correctText: "دبي" },
-        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الذهب", "الفضة", "النحاس", "الخشب"], correctText: "الخشب" },
-        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["المربع", "المستطيل", "المثلث", "المكعب"], correctText: "المكعب" },
-        { type: "استيعاب المقروء", text: "تعتبر الشمس المصدر الرئيسي للطاقة على كوكب الأرض.", q: "المصدر الرئيسي للطاقة هو:", options: ["الشمس", "الرياح", "الماء", "الكهرباء"], correctText: "الشمس" },
-        { type: "استيعاب المقروء", text: "تعتمد النباتات في غذائها على عملية التمثيل الضوئي.", q: "تعتمد النباتات في غذائها على:", options: ["التمثيل الضوئي", "الماء فقط", "التربة فقط", "الهواء فقط"], correctText: "التمثيل الضوئي" },
-        { type: "استيعاب المقروء", text: "تعتبر القراءة وسيلة هامة لاكتساب المعرفة وتوسيع المدارك.", q: "وسيلة هامة لاكتساب المعرفة هي:", options: ["القراءة", "اللعب", "النوم", "الأكل"], correctText: "القراءة" },
-        { type: "استيعاب المقروء", text: "تعتبر الرياضة ضرورية للحفاظ على صحة الجسم وسلامته.", q: "الرياضة ضرورية للحفاظ على:", options: ["صحة الجسم", "جمال الجسم", "طول الجسم", "وزن الجسم"], correctText: "صحة الجسم" }
+        { type: "التناظر اللفظي", q: "صحيفة : أخبار", options: ["مكتبة : كتب", "مستشفى : أطباء", "ساعة : وقت", "مدرسة : فصول"], correctText: "ساعة : وقت" },
+        { type: "التناظر اللفظي", q: "خاتم : ذهب", options: ["باب : خشب", "حقيبة : جلد", "ثوب : قماش", "سور : حجر"], correctText: "باب : خشب" },
+        { type: "التناظر اللفظي", q: "عجين : خبز", options: ["نخلة : تمر", "ماء : ثلج", "طحين : قمح", "بذرة : شجرة"], correctText: "بذرة : شجرة" },
+        { type: "التناظر اللفظي", q: "كأس : زجاج", options: ["قلم : حبر", "محفظة : نقود", "خزانة : ملابس", "إناء : نحاس"], correctText: "إناء : نحاس" },
+        { type: "الخطأ في السياق", q: "الشجاعة هي القدرة على مواجهة الخطر، أما الجبن فهو القدرة على الهروب منه", options: ["الشجاعة", "الخطر", "الجبن", "القدرة"], correctText: "القدرة" },
+        { type: "الخطأ في السياق", q: "من أراد أن يقود الناس، فعليه أن يتبعهم في أخطائهم", options: ["يقود", "فعليه", "يتبعهم", "أخطائهم"], correctText: "يتبعهم" },
+        { type: "الخطأ في السياق", q: "التواضع يرفع من مكانة المرء، أما التكبر فهو دليل على قوة الشخصية", options: ["التواضع", "مكانة", "التكبر", "قوة"], correctText: "قوة" },
+        { type: "الخطأ في السياق", q: "العمل الجاد هو الطريق للنجاح، والكسل هو الطريق للتميز", options: ["الجاد", "النجاح", "الكسل", "للتميز"], correctText: "للتميز" },
+        { type: "إكمال الجمل", q: "من غضب من لا شيء، رضي بـ .....", options: ["لا شيء", "كل شيء", "أقل شيء", "أكثر شيء"], correctText: "لا شيء" },
+        { type: "إكمال الجمل", q: "اجعل من الفشل سلماً للـ .....، ولا تجعل منه وسادة للـ .....", options: ["صعود - ركود", "نجاح - فشل", "عمل - كسل", "أمل - يأس"], correctText: "صعود - ركود" },
+        { type: "إكمال الجمل", q: "كن كالغيث إذا ..... نفع، وإذا ..... أبقى أثراً", options: ["نزل - رحل", "جاء - ذهب", "هطل - غاب", "سقط - ولى"], correctText: "نزل - رحل" },
+        { type: "إكمال الجمل", q: "السعادة ليست في كثرة المال، بل في ..... بما تملك", options: ["القناعة", "الرضا", "الاستثمار", "التوفير"], correctText: "القناعة" },
+        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["البرتقال", "التفاح", "العنب", "البطاطس"], correctText: "البطاطس" },
+        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الرياض", "القاهرة", "دبي", "بغداد"], correctText: "دبي" },
+        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["الخشب", "الحديد", "النحاس", "الألمنيوم"], correctText: "الخشب" },
+        { type: "المفردة الشاذة", q: "ما الكلمة المختلفة؟", options: ["المكعب", "المربع", "المستطيل", "المعين"], correctText: "المكعب" },
+        { type: "استيعاب المقروء", text: "تعتبر الغابات رئة الكوكب لما توفره من أكسجين وامتصاص لغاز ثاني أكسيد الكربون.", q: "توصف الغابات بأنها رئة الكوكب لأنها:", options: ["تنتج الأكسجين", "مساحتها كبيرة", "أشجارها طويلة", "خضراء اللون"], correctText: "تنتج الأكسجين" },
+        { type: "استيعاب المقروء", text: "يعد الفحم الحجري من مصادر الطاقة غير المتجددة والتي يسبب احتراقها تلوثاً بيئياً كبيراً.", q: "الفحم الحجري يعتبر مصدراً لـ:", options: ["الطاقة غير المتجددة", "الطاقة النظيفة", "الطاقة المتجددة", "الطاقة البديلة"], correctText: "الطاقة غير المتجددة" },
+        { type: "استيعاب المقروء", text: "تعتبر اللغة العربية من أقدم اللغات الحية وأكثرها غزارة في المفردات والمعاني.", q: "ما يميز اللغة العربية حسب النص هو:", options: ["غزارة المفردات", "سهولة التعلم", "جمال الخط", "انتشارها الواسع"], correctText: "غزارة المفردات" },
+        { type: "استيعاب المقروء", text: "تعتمد دورة المياه في الطبيعة بشكل أساسي على تبخر مياه البحار والمحيطات بفعل حرارة الشمس.", q: "المحرك الأساسي لدورة المياه هو:", options: ["حرارة الشمس", "الرياح", "البرودة", "الأمطار"], correctText: "حرارة الشمس" }
     ];
 
     let quizData = [];
